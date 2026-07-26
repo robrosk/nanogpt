@@ -24,7 +24,7 @@ n = int(0.9 * len(data))
 train_data = data[:n]
 val_data = data[n:]
 
-# data loading
+# data loading (mini batches)
 def get_batch(split):
     # generate a small batch of data of inputs x and targets y
     data = train_data if split == 'train' else val_data
@@ -53,7 +53,6 @@ def estimate_loss():
     model.train()
     return out
 
-# simple bigram model
 class NanoGPT(nn.Module):
     def __init__(self):
         super().__init__()
@@ -109,6 +108,7 @@ m = model.to(device)
 # print the number of parameters in the model
 print(sum(p.numel() for p in m.parameters())/1e6, 'M parameters')
 
+# adam optimizer - therefore we are using mini-batch gradient descent with an adaptive optimizer
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 
 for iter in range(max_iters):
